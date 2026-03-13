@@ -49,3 +49,12 @@ width: 300px;
 background-color: #334155;
 margin: auto;
 }
+
+.dashboard{
+background-color:#1e293b;
+padding:20px;
+margin:20px auto;
+width:320px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.5);
+}

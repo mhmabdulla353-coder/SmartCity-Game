@@ -9,6 +9,24 @@
 
 <h1>SmartCity Puzzle Crisis Simulator</h1>
 
+<div class="dashboard">
+
+<h2>🏙 Smart City Dashboard</h2>
+
+<p>👤 Player: <span id="playerNameDisplay"></span></p>
+
+<p>🚨 Crisis Status: <span id="crisisStatus">No crisis started</span></p>
+
+<p>⭐ Score: <span id="score">0</span></p>
+
+<p>📊 Progress: <span id="progressText">0%</span></p>
+
+<div class="progress-container">
+<div id="progressBar"></div>
+</div>
+
+</div>
+
 <h2>City Crisis</h2>
 
 <button onclick="startCrisis('fire')">🔥 Fire</button>
@@ -23,20 +41,6 @@
 
 <input type="text" id="answer" placeholder="Enter answer">
 <button onclick="checkAnswer()">Submit</button>
-
-<h2>Crisis Status</h2>
-<p id="crisisStatus">No crisis started</p>
-
-<h2>Score</h2>
-<p id="score">0</p>
-
-<h2>Progress</h2>
-
-<div class="progress-container">
-<div id="progressBar"></div>
-</div>
-
-<p id="progressText">0%</p>
 
 <script src="script.js"></script>
 
