@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SmartCity Login</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>🏙 SmartCity Login</h1>
+
+<div class="dashboard">
+
+<h2>Enter Player Name</h2>
+
+<input type="text" id="playerName" placeholder="Enter your name">
+
+<br><br>
+
+<button onclick="login()">Start Game</button>
+
+</div>
+
+<script>
+
+function login(){
+
+let name = document.getElementById("playerName").value;
+
+if(name === ""){
+alert("Please enter your name");
+return;
+}
+
+localStorage.setItem("playerName", name);
+
+window.location.href = "index.html";
+
+}
+
+</script>
+
+</body>
+</html>

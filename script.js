@@ -1,3 +1,11 @@
+let playerName = localStorage.getItem("playerName");
+
+if(!playerName){
+window.location.href = "login.html";
+}
+
+document.getElementById("playerNameDisplay").innerText = playerName;
+
 // Virtual Identity System
 let playerName = localStorage.getItem("playerName");
 
