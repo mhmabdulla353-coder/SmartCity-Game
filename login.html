@@ -1,44 +1,46 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>SmartCity Login</title>
-<link rel="stylesheet" href="style.css">
+    <title>SmartCity Login</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>🏙 SmartCity Login</h1>
+    <h1>🏙 SmartCity Login</h1>
 
-<div class="dashboard">
+    <div class="dashboard">
 
-<h2>Enter Player Name</h2>
+        <h2>Enter Player Name</h2>
 
-<input type="text" id="playerName" placeholder="Enter your name">
+        <input type="text" id="playerName" placeholder="Enter your name">
 
-<br><br>
+        <br><br>
 
-<button onclick="login()">Start Game</button>
+        <button onclick="login()">Start Game</button>
 
-</div>
+    </div>
 
-<script>
+    <script>
 
-function login(){
+        function login() {
 
-let name = document.getElementById("playerName").value;
+            let name = document.getElementById("playerName").value;
 
-if(name === ""){
-alert("Please enter your name");
-return;
-}
+            if (name === "") {
+                alert("Please enter your name");
+                return;
+            }
 
-localStorage.setItem("playerName", name);
+            localStorage.setItem("playerName", name);
 
-window.location.href = "index.html";
+            window.location.href = "index.html";
 
-}
+        }
 
-</script>
+    </script>
 
 </body>
+
 </html>

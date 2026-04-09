@@ -1,48 +1,69 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>SmartCity Puzzle Crisis Simulator</title>
-<link rel="stylesheet" href="style.css">
+    <!-- Title of the web page shown in the browser tab -->
+    <title>SmartCity Puzzle Crisis Simulator</title>
+
+    <!-- Linking the external CSS file for styling -->
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>SmartCity Puzzle Crisis Simulator</h1>
+    <!-- Main title of the application -->
+    <h1>SmartCity Puzzle Crisis Simulator</h1>
 
-<div class="dashboard">
+    <!-- Smart City Dashboard section -->
+    <div class="dashboard">
 
-<h2>🏙 Smart City Dashboard</h2>
+        <!-- Dashboard heading -->
+        <h2>🏙 Smart City Dashboard</h2>
 
-<p>👤 Player: <span id="playerNameDisplay"></span></p>
+        <!-- Displays the player name (Virtual Identity) -->
+        <p>👤 Player: <span id="playerNameDisplay"></span></p>
 
-<p>🚨 Crisis Status: <span id="crisisStatus">No crisis started</span></p>
+        <!-- Shows the current crisis status -->
+        <p>🚨 Crisis Status: <span id="crisisStatus">No crisis started</span></p>
 
-<p>⭐ Score: <span id="score">0</span></p>
+        <!-- Displays the player's score -->
+        <p>⭐ Score: <span id="score">0</span></p>
 
-<p>📊 Progress: <span id="progressText">0%</span></p>
+        <!-- Displays the progress percentage -->
+        <p>📊 Progress: <span id="progressText">0%</span></p>
 
-<div class="progress-container">
-<div id="progressBar"></div>
-</div>
+        <!-- Progress bar container -->
+        <div class="progress-container">
+            <!-- Actual progress bar that increases as puzzles are solved -->
+            <div id="progressBar"></div>
+        </div>
 
-</div>
+    </div>
 
-<h2>City Crisis</h2>
+    <!-- Actual progress bar that increases as puzzles are solved -->
+    <h2>City Crisis</h2>
 
-<button onclick="startCrisis('fire')">🔥 Fire</button>
-<button onclick="startCrisis('flood')">🌊 Flood</button>
-<button onclick="startCrisis('accident')">🚗 Accident</button>
+    <!-- Section for selecting the type of city crisis -->
+    <button onclick="startCrisis('fire')">🔥 Fire</button>
+    <button onclick="startCrisis('flood')">🌊 Flood</button>
+    <button onclick="startCrisis('accident')">🚗 Accident</button>
 
-<h2>Puzzle</h2>
+    <!-- Puzzle section -->
+    <h2>Puzzle</h2>
 
-<img id="puzzleImage" width="300">
+    <!-- Image that displays the puzzle question from the API -->
+    <img id="puzzleImage" width="300">
 
-<br><br>
+    <br><br>
 
-<input type="text" id="answer" placeholder="Enter answer">
-<button onclick="checkAnswer()">Submit</button>
+    <!-- Image that displays the puzzle question from the API -->
+    <input type="text" id="answer" placeholder="Enter answer">
+    <!-- Button to submit the answer -->
+    <button onclick="checkAnswer()">Submit</button>
 
-<script src="script.js"></script>
+    <!-- Button to submit the answer -->
+    <script src="script.js"></script>
 
 </body>
+
 </html>
