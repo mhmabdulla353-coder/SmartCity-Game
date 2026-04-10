@@ -1,3 +1,4 @@
+// Player identity
 let playerName = localStorage.getItem("playerName");
 
 if (!playerName) {
@@ -6,51 +7,35 @@ if (!playerName) {
 
 document.getElementById("playerNameDisplay").innerText = playerName;
 
-// Virtual Identity System
-
-if (!playerName) {
-    playerName = prompt("Enter your name:");
-    localStorage.setItem("playerName", playerName);
-}
-
-console.log("Player:", playerName);
-
-
 // Game variables
 let puzzlesSolved = 0;
 let progress = 0;
 let score = 0;
 let correctAnswer = null;
 
+// Start crisis
 function startCrisis(type) {
-
     document.getElementById("crisisStatus").innerText =
         "Crisis Active: " + type.toUpperCase();
 
     loadPuzzle();
-
 }
 
+// Load puzzle from API
 function loadPuzzle() {
-
     fetch("https://marcconrad.com/uob/banana/api.php")
         .then(response => response.json())
         .then(data => {
-
             document.getElementById("puzzleImage").src = data.question;
-
-            // convert answer to number safely
             correctAnswer = Number(data.solution);
-
             console.log("Correct answer:", correctAnswer);
-
         })
         .catch(error => {
             console.log("Error loading puzzle:", error);
         });
-
 }
 
+// Check answer
 function checkAnswer() {
 
     let userAnswer = document.getElementById("answer").value.trim();
@@ -62,37 +47,41 @@ function checkAnswer() {
 
     userAnswer = Number(userAnswer);
 
-    console.log("User answer:", userAnswer);
-
     if (userAnswer === correctAnswer) {
 
         alert("Correct!");
 
         puzzlesSolved++;
-
-        score = score + 10;
+        score += 10;
 
         document.getElementById("score").innerText = score;
 
         updateProgress();
 
-        document.getElementById("answer").value = "";
+        // 🎯 Victory check (CORRECT PLACE)
+        if (puzzlesSolved >= 10) {
 
+            alert("🎉 Crisis Solved!");
+            document.getElementById("crisisStatus").innerText = "City Safe";
+
+            // 🔊 Play sound
+            document.getElementById("victorySound").play();
+        }
+
+        document.getElementById("answer").value = "";
         document.getElementById("answer").focus();
 
         loadPuzzle();
 
-    }
-    else {
+    } else {
 
         alert("Wrong answer");
-
         document.getElementById("answer").value = "";
 
     }
-
 }
 
+// Update progress
 function updateProgress() {
 
     progress = puzzlesSolved * 10;
@@ -102,15 +91,11 @@ function updateProgress() {
     }
 
     document.getElementById("progressText").innerText = progress + "%";
-
     document.getElementById("progressBar").style.width = progress + "%";
 
-    if (puzzlesSolved >= 10) {
-
-        alert("🎉 Crisis Solved!");
-
-        document.getElementById("crisisStatus").innerText = "City Safe";
-
-    }
-
 }
+
+// Load first puzzle automatically
+window.onload = function () {
+    loadPuzzle();
+};
