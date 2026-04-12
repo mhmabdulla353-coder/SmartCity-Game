@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>SmartCity Login</title>
+    <title>SmartCity Register</title>
     <link rel="stylesheet" href="style.css">
     <style>
 
@@ -40,14 +40,14 @@
             pointer-events: none;
         }
 
-        /* Login card */
-        .login-card {
+        /* Register card */
+        .register-card {
             background: rgba(255, 255, 255, 0.07);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 20px;
             padding: 2.5rem 2rem;
             width: 100%;
-            max-width: 360px;
+            max-width: 370px;
             position: relative;
             z-index: 10;
             text-align: center;
@@ -55,14 +55,14 @@
 
         .logo { font-size: 3rem; margin-bottom: 0.3rem; }
 
-        .login-card h1 {
+        .register-card h1 {
             font-size: 1.4rem;
             font-weight: 700;
             color: #38bdf8;
             margin: 0 0 0.2rem;
         }
 
-        .login-card p.subtitle {
+        .register-card p.subtitle {
             font-size: 0.85rem;
             color: #94a3b8;
             margin: 0 0 1.5rem;
@@ -103,8 +103,8 @@
 
         .input-wrap input::placeholder { color: #475569; }
 
-        /* Login button */
-        .btn-start {
+        /* Create account button */
+        .btn-register {
             width: 100%;
             padding: 13px;
             border: none;
@@ -118,7 +118,7 @@
             letter-spacing: 0.5px;
             transition: opacity 0.2s;
         }
-        .btn-start:hover { opacity: 0.88; }
+        .btn-register:hover { opacity: 0.88; }
 
         /* Divider line */
         .divider {
@@ -130,12 +130,12 @@
         .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
         .divider-text { font-size: 0.72rem; color: #475569; }
 
-        /* Register link */
-        .register-link { font-size: 0.88rem; color: #94a3b8; }
-        .register-link a { color: #38bdf8; font-weight: 600; text-decoration: none; }
-        .register-link a:hover { text-decoration: underline; }
+        /* Login link */
+        .login-link { font-size: 0.88rem; color: #94a3b8; }
+        .login-link a { color: #38bdf8; font-weight: 600; text-decoration: none; }
+        .login-link a:hover { text-decoration: underline; }
 
-        /* Error message */
+        /* Error message - shown in red */
         #errorMsg {
             color: #ef4444;
             font-size: 0.82rem;
@@ -147,18 +147,26 @@
             display: none;
         }
 
-        /* Badges at bottom */
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 1rem;
+        /* Success message - shown in green */
+        #successMsg {
+            color: #22c55e;
+            font-size: 0.82rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 1rem;
+            display: none;
         }
-        .badge { font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; border: 1px solid; }
-        .badge-blue   { color: #38bdf8; border-color: rgba(56,189,248,0.35);  background: rgba(56,189,248,0.08); }
-        .badge-green  { color: #22c55e; border-color: rgba(34,197,94,0.35);   background: rgba(34,197,94,0.08); }
-        .badge-purple { color: #a78bfa; border-color: rgba(167,139,250,0.35); background: rgba(167,139,250,0.08); }
+
+        /* Password match indicator */
+        #matchMsg {
+            font-size: 0.78rem;
+            margin-top: 4px;
+            margin-left: 4px;
+            display: none;
+            text-align: left;
+        }
 
     </style>
 </head>
@@ -181,18 +189,22 @@
         <rect x="665" y="25" width="55"  height="95"  fill="#1e3a5f" opacity="0.8"/>
         <rect x="760" y="40" width="40"  height="80"  fill="#1e3a5f" opacity="0.8"/>
         <!-- Glowing windows -->
+        <rect x="40"  y="65" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
         <rect x="120" y="55" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
         <rect x="270" y="45" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
         <rect x="515" y="45" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
         <rect x="670" y="50" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
     </svg>
 
-    <!-- Login Card -->
-    <div class="login-card">
+    <!-- Register Card -->
+    <div class="register-card">
 
         <div class="logo">🏙</div>
-        <h1>SmartCity Login</h1>
-        <p class="subtitle">Sign in to manage your city</p>
+        <h1>Create Account</h1>
+        <p class="subtitle">Join SmartCity and save the city!</p>
+
+        <!-- Success message (hidden until account created) -->
+        <p id="successMsg"></p>
 
         <!-- Error message (hidden until error happens) -->
         <p id="errorMsg"></p>
@@ -200,33 +212,40 @@
         <!-- Username input -->
         <div class="input-wrap">
             <span class="input-icon">👤</span>
-            <input type="text" id="playerName" placeholder="Enter your username" />
+            <input type="text" id="regUsername" placeholder="Enter your username" />
         </div>
 
         <!-- Password input -->
         <div class="input-wrap">
             <span class="input-icon">🔐</span>
-            <input type="password" id="playerPassword" placeholder="Enter your password" />
+            <input type="password" id="regPassword" placeholder="Create a password" />
         </div>
 
-        <!-- Login button -->
-        <button class="btn-start" onclick="login()">▶ Login</button>
+        <!-- Confirm password input -->
+        <!-- oninput fires every time user types - event driven! -->
+        <div class="input-wrap">
+            <span class="input-icon">🔁</span>
+            <input type="password" id="regConfirm"
+                   placeholder="Confirm your password"
+                   oninput="checkPasswordMatch()" />
+            <!-- Shows if passwords match or not -->
+            <p id="matchMsg"></p>
+        </div>
+
+        <!-- Create account button -->
+        <button class="btn-register" onclick="register()">
+            ✅ Create Account
+        </button>
 
         <div class="divider">
             <div class="divider-line"></div>
-            <div class="divider-text">new to SmartCity?</div>
+            <div class="divider-text">already have an account?</div>
             <div class="divider-line"></div>
         </div>
 
-        <!-- Link to register page -->
-        <div class="register-link">
-            Don't have an account? <a href="register.html">Register here →</a>
-        </div>
-
-        <div class="badges">
-            <span class="badge badge-blue">🌐 API</span>
-            <span class="badge badge-green">🔒 Auth</span>
-            <span class="badge badge-purple">⚡ Events</span>
+        <!-- Link back to login page -->
+        <div class="login-link">
+            Already registered? <a href="login.html">Login here →</a>
         </div>
 
     </div>
@@ -234,8 +253,8 @@
     <script>
 
         // ── THEME: VIRTUAL IDENTITY ──────────────────────────────────────
-        // Login checks username and password against registered accounts
-        // Accounts are stored in localStorage as a JSON array
+        // Registration saves new player accounts to localStorage
+        // Each account: { username, password (base64 encoded), date }
         // Reference: MDN - localStorage
         // https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
 
@@ -252,67 +271,119 @@
             document.body.appendChild(star);
         }
 
-        // If already logged in go straight to leaderboard
+        // If already logged in skip to leaderboard
         if (localStorage.getItem("authenticated") === "true") {
             window.location.href = "leaderboard.html";
         }
 
-        // ── Show error message ────────────────────────────────────────────
-        function showError(msg) {
-            let el           = document.getElementById("errorMsg");
-            el.innerText     = "❌ " + msg;
-            el.style.display = "block";
-        }
+        // ── Password match checker ────────────────────────────────────────
+        // THEME: EVENT-DRIVEN - fires every time user types in confirm field
+        function checkPasswordMatch() {
+            let password = document.getElementById("regPassword").value;
+            let confirm  = document.getElementById("regConfirm").value;
+            let matchMsg = document.getElementById("matchMsg");
 
-        // ── Login function ────────────────────────────────────────────────
-        // Triggered by button click or Enter key
-        function login() {
-
-            // Get values from input fields
-            let username = document.getElementById("playerName").value.trim();
-            let password = document.getElementById("playerPassword").value.trim();
-
-            // Check fields are not empty
-            if (username === "" || password === "") {
-                showError("Please enter your username and password!");
+            // Don't show anything if confirm is empty
+            if (confirm === "") {
+                matchMsg.style.display = "none";
                 return;
             }
 
-            // Get all registered users from localStorage
+            matchMsg.style.display = "block";
+
+            if (password === confirm) {
+                matchMsg.innerText   = "✅ Passwords match!";
+                matchMsg.style.color = "#22c55e"; // green
+            } else {
+                matchMsg.innerText   = "❌ Passwords do not match!";
+                matchMsg.style.color = "#ef4444"; // red
+            }
+        }
+
+        // ── Show error message ────────────────────────────────────────────
+        function showError(msg) {
+            document.getElementById("errorMsg").innerText     = "❌ " + msg;
+            document.getElementById("errorMsg").style.display = "block";
+            document.getElementById("successMsg").style.display = "none";
+        }
+
+        // ── Show success message ──────────────────────────────────────────
+        function showSuccess(msg) {
+            document.getElementById("successMsg").innerText     = "✅ " + msg;
+            document.getElementById("successMsg").style.display = "block";
+            document.getElementById("errorMsg").style.display   = "none";
+        }
+
+        // ── Register function ─────────────────────────────────────────────
+        // Triggered by button click or Enter key
+        function register() {
+
+            // Get values from input fields
+            let username = document.getElementById("regUsername").value.trim();
+            let password = document.getElementById("regPassword").value.trim();
+            let confirm  = document.getElementById("regConfirm").value.trim();
+
+            // Check 1: All fields must be filled
+            if (username === "" || password === "" || confirm === "") {
+                showError("Please fill in all fields!");
+                return;
+            }
+
+            // Check 2: Username must be at least 3 characters
+            if (username.length < 3) {
+                showError("Username must be at least 3 characters!");
+                return;
+            }
+
+            // Check 3: Password must be at least 4 characters
+            if (password.length < 4) {
+                showError("Password must be at least 4 characters!");
+                return;
+            }
+
+            // Check 4: Both passwords must match
+            if (password !== confirm) {
+                showError("Passwords do not match!");
+                return;
+            }
+
+            // Check 5: Username must not already exist
             let users = JSON.parse(localStorage.getItem("users") || "[]");
 
-            // Find the user by username (not case sensitive)
-            let user = users.find(function(u) {
+            let userExists = users.find(function(u) {
                 return u.username.toLowerCase() === username.toLowerCase();
             });
 
-            // If username not found
-            if (!user) {
-                showError("Username not found! Please register first.");
+            if (userExists) {
+                showError("Username already taken! Choose another.");
                 return;
             }
 
-            // If password is wrong
-            if (user.password !== btoa(password)) {
-                showError("Wrong password! Please try again.");
-                return;
-            }
+            // All checks passed - save new account!
+            // Password is encoded using base64 for basic security
+            // Reference: MDN - btoa()
+            // https://developer.mozilla.org/en-US/docs/Web/API/btoa
+            users.push({
+                username: username,
+                password: btoa(password),
+                date:     new Date().toLocaleDateString()
+            });
 
-            // Login successful!
-            // Store virtual identity in localStorage and sessionStorage
-            localStorage.setItem("playerName", user.username);
-            localStorage.setItem("authenticated", "true");
-            sessionStorage.setItem("playerPassword", btoa(password));
+            localStorage.setItem("users", JSON.stringify(users));
 
-            // Go to leaderboard
-            window.location.href = "leaderboard.html";
+            // Show success message
+            showSuccess("Account created! Redirecting to login...");
+
+            // THEME: EVENT-DRIVEN - setTimeout fires after 2 seconds
+            setTimeout(function() {
+                window.location.href = "login.html";
+            }, 2000);
         }
 
-        // ── THEME: EVENT-DRIVEN PROGRAMMING ──────────────────────────────
-        // Enter key triggers login function (keyboard event)
+        // THEME: EVENT-DRIVEN - Enter key triggers register
         document.addEventListener("keydown", function(event) {
             if (event.key === "Enter") {
-                login();
+                register();
             }
         });
 
