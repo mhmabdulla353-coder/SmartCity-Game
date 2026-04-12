@@ -58,3 +58,22 @@ input {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+
+/* ── Added: Centre the puzzle section ── */
+#puzzleImage {
+    display: block;
+    margin: 10px auto;
+}
+
+#answer {
+    display: block;
+    margin: 10px auto;
+}
+
+#feedbackMsg {
+    text-align: center;
+}
+
+#loadingText {
+    text-align: center;
+}

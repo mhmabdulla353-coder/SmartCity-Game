@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartCity Leaderboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+        .star {
+            position: fixed;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes twinkle {
+            from { opacity: 0.2; }
+            to   { opacity: 1; }
+        }
+        .skyline {
+            position: fixed;
+            bottom: 0; left: 0;
+            width: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(15,23,42,0.6);
+            border-bottom: 1px solid rgba(56,189,248,0.2);
+            position: relative;
+            z-index: 10;
+        }
+        .topbar-title { font-size: 1.1rem; color: #38bdf8; font-weight: bold; letter-spacing: 2px; }
+        .topbar-player { font-size: 0.95rem; color: #94a3b8; }
+        .topbar-player span { color: #22c55e; font-weight: 600; }
+        .btn-logout {
+            padding: 7px 16px;
+            border: 1px solid rgba(239,68,68,0.4);
+            border-radius: 8px;
+            background: rgba(239,68,68,0.1);
+            color: #ef4444;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .btn-logout:hover { background: rgba(239,68,68,0.25); }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem 1rem 6rem;
+            position: relative;
+            z-index: 5;
+        }
+        .hero { text-align: center; margin-bottom: 2rem; }
+        .hero-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #38bdf8;
+            letter-spacing: 3px;
+            margin-bottom: 0.3rem;
+        }
+        .hero p { color: #64748b; font-size: 0.95rem; }
+        .btn-play {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 2.5rem;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #0ea5e9, #6366f1);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn-play:hover { opacity: 0.88; transform: scale(1.02); }
+        .lb-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(56,189,248,0.2);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .lb-header {
+            display: grid;
+            grid-template-columns: 60px 1fr 120px 100px;
+            padding: 0.8rem 1.5rem;
+            background: rgba(56,189,248,0.1);
+            border-bottom: 1px solid rgba(56,189,248,0.2);
+            font-size: 0.8rem;
+            color: #38bdf8;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .lb-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 120px 100px;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            align-items: center;
+        }
+        .lb-row:last-child { border-bottom: none; }
+        .lb-row:hover { background: rgba(255,255,255,0.04); }
+        .rank { font-size: 1rem; font-weight: 700; }
+        .rank-1 { color: #fbbf24; }
+        .rank-2 { color: #94a3b8; }
+        .rank-3 { color: #cd7c2f; }
+        .rank-other { color: #475569; }
+        .player-name { font-size: 1rem; font-weight: 600; color: white; }
+        .player-name.current-player { color: #22c55e; }
+        .player-name.current-player::after {
+            content: " ← You";
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+        .score-val { font-size: 1rem; color: #38bdf8; font-weight: 700; }
+        .time-val  { font-size: 0.9rem; color: #64748b; }
+        .empty-state { text-align: center; padding: 3rem; color: #475569; }
+        .empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <svg class="skyline" viewBox="0 0 800 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <rect x="0"   y="60" width="30"  height="60"  fill="#1e3a5f" opacity="0.8"/>
+        <rect x="35"  y="40" width="40"  height="80"  fill="#1e3a5f" opacity="0.8"/>
+        <rect x="80"  y="50" width="25"  height="70"  fill="#162d4a" opacity="0.9"/>
+        <rect x="110" y="25" width="50"  height="95"  fill="#1e3a5f" opacity="0.8"/>
+        <rect x="165" y="55" width="20"  height="65"  fill="#162d4a" opacity="0.9"/>
+        <rect x="260" y="20" width="55"  height="100" fill="#1e3a5f" opacity="0.8"/>
+        <rect x="278" y="10" width="8"   height="10"  fill="#38bdf8" opacity="0.5"/>
+        <rect x="355" y="30" width="45"  height="90"  fill="#1e3a5f" opacity="0.8"/>
+        <rect x="510" y="20" width="50"  height="100" fill="#1e3a5f" opacity="0.8"/>
+        <rect x="528" y="10" width="8"   height="10"  fill="#38bdf8" opacity="0.5"/>
+        <rect x="665" y="25" width="55"  height="95"  fill="#1e3a5f" opacity="0.8"/>
+        <rect x="760" y="40" width="40"  height="80"  fill="#1e3a5f" opacity="0.8"/>
+        <rect x="120" y="55" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
+        <rect x="270" y="45" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
+        <rect x="515" y="45" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
+        <rect x="670" y="50" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
+    </svg>
+
+    <div class="topbar">
+        <div class="topbar-title">🏙 SMARTCITY</div>
+        <div class="topbar-player">👤 Playing as: <span id="playerDisplay"></span></div>
+        <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <div class="hero-icon">🏆</div>
+            <h1>LEADERBOARD</h1>
+            <p>Top crisis solvers in SmartCity</p>
+        </div>
+
+        <button class="btn-play" onclick="window.location.href='index.html'">▶ PLAY GAME</button>
+
+        <div class="lb-card">
+            <div class="lb-header">
+                <div>Rank</div>
+                <div>Player</div>
+                <div>Score</div>
+                <div>Time</div>
+            </div>
+            <div id="leaderboardBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // ── THEME: VIRTUAL IDENTITY ──────────────────────────────────────
+        let playerName = localStorage.getItem("playerName");
+
+        if (!playerName || localStorage.getItem("authenticated") !== "true") {
+            window.location.href = "login.html";
+        }
+
+        document.getElementById("playerDisplay").innerText = playerName;
+
+        // Generate stars
+        for (let i = 0; i < 40; i++) {
+            let star = document.createElement("div");
+            star.className = "star";
+            star.style.width  = (Math.random() * 2 + 1) + "px";
+            star.style.height = star.style.width;
+            star.style.top    = (Math.random() * 70) + "%";
+            star.style.left   = (Math.random() * 100) + "%";
+            star.style.animationDuration = (Math.random() * 2 + 1.5) + "s";
+            star.style.animationDelay    = (Math.random() * 2) + "s";
+            document.body.appendChild(star);
+        }
+
+        // Load and display leaderboard scores from localStorage
+        function loadLeaderboard() {
+            let scores = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+
+            scores.sort(function(a, b) {
+                if (b.score !== a.score) return b.score - a.score;
+                return a.time - b.time;
+            });
+
+            scores = scores.slice(0, 10);
+
+            let body = document.getElementById("leaderboardBody");
+
+            if (scores.length === 0) {
+                body.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🎮</div>
+                        <p>No scores yet! Play a game to get on the board.</p>
+                    </div>`;
+                return;
+            }
+
+            body.innerHTML = "";
+
+            scores.forEach(function(entry, index) {
+                let rank = index + 1;
+                let rankDisplay = "";
+                if (rank === 1)      rankDisplay = '<span class="rank rank-1">👑 1</span>';
+                else if (rank === 2) rankDisplay = '<span class="rank rank-2">🥈 2</span>';
+                else if (rank === 3) rankDisplay = '<span class="rank rank-3">🥉 3</span>';
+                else                 rankDisplay = '<span class="rank rank-other">' + rank + '</span>';
+
+                let nameClass  = entry.name === playerName ? "player-name current-player" : "player-name";
+                let timeDisplay = entry.time ? entry.time + "s" : "-";
+
+                let row = document.createElement("div");
+                row.className = "lb-row";
+                row.innerHTML = `
+                    <div>${rankDisplay}</div>
+                    <div class="${nameClass}">${entry.name}</div>
+                    <div class="score-val">⭐ ${entry.score}</div>
+                    <div class="time-val">⏱ ${timeDisplay}</div>
+                `;
+                body.appendChild(row);
+            });
+        }
+
+        function logout() {
+            localStorage.removeItem("playerName");
+            localStorage.removeItem("authenticated");
+            sessionStorage.removeItem("playerPassword");
+            window.location.href = "login.html";
+        }
+
+        // Load leaderboard on page load (event-driven)
+        window.onload = function() { loadLeaderboard(); };
+    </script>
+</body>
+</html>

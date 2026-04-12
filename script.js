@@ -4,23 +4,17 @@
 // =============================================================================
 
 // ── THEME: VIRTUAL IDENTITY ──────────────────────────────────────────────────
-// Using localStorage and sessionStorage to manage player identity.
-// Checks if player is logged in - if not, redirects to login page.
-// Reference: MDN Web Docs - Web Storage API
-// https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API
+// localStorage and sessionStorage manage player identity
+// Reference: https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API
 
 let playerName = localStorage.getItem("playerName");
 
-// If not logged in, redirect back to login page
 if (!playerName || localStorage.getItem("authenticated") !== "true") {
     window.location.href = "login.html";
 }
 
-// Display player name from localStorage (Virtual Identity)
 document.getElementById("playerNameDisplay").innerText = playerName;
 
-// ── Logout Function ───────────────────────────────────────────────────────────
-// Clears all stored identity data - destroys virtual identity
 function logout() {
     localStorage.removeItem("playerName");
     localStorage.removeItem("authenticated");
@@ -37,52 +31,80 @@ let progress      = 0;
 let score         = 0;
 let correctAnswer = null;
 let currentCrisis = null;
+let timeLeft      = 30;
+let timerInterval = null;
+let totalTime     = 0;
 
 // =============================================================================
 // THEME: EVENT-DRIVEN PROGRAMMING
-// All actions in this app are triggered by events:
-// onclick, keydown, window.onload, fetch .then(), setInterval
+// onclick, keydown, window.onload, fetch .then(), setInterval, setTimeout
 // =============================================================================
 
-// ── Event: Enter key press submits answer ────────────────────────────────────
-// Reference: MDN - KeyboardEvent
-// https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
+// Enter key submits answer (keyboard event)
 document.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        checkAnswer();
-    }
+    if (event.key === "Enter") { checkAnswer(); }
 });
 
 // =============================================================================
-// THEME: INTEROPERABILITY
-// Fetching puzzles from the Banana API (external web service)
-// Our JavaScript app communicates with a remote PHP server using HTTP and JSON.
-// This shows two different systems working together (interoperability).
-// API by Marc Conrad: https://marcconrad.com/uob/banana/api.php
-// API Documentation:  https://marcconrad.com/uob/banana/doc.php
+// COUNTDOWN TIMER
+// setInterval fires every 1000ms - event-driven timer
+// Reference: https://developer.mozilla.org/en-US/docs/Web/API/setInterval
 // =============================================================================
 
-// ── Load puzzle from Banana API ───────────────────────────────────────────────
-function loadPuzzle() {
+function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 30;
+    updateTimerDisplay();
 
+    timerInterval = setInterval(function() {
+        timeLeft--;
+        totalTime++;
+        updateTimerDisplay();
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            document.getElementById("feedbackMsg").innerText = "⏰ Time's up! Loading next puzzle...";
+            document.getElementById("feedbackMsg").style.color = "#f59e0b";
+            document.getElementById("answer").value = "";
+            setTimeout(function() { loadPuzzle(); }, 1500);
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    let timerEl = document.getElementById("timerDisplay");
+    if (!timerEl) return;
+    timerEl.innerText = timeLeft + "s";
+    if (timeLeft > 15)     timerEl.style.color = "#22c55e";
+    else if (timeLeft > 8) timerEl.style.color = "#f59e0b";
+    else                   timerEl.style.color = "#ef4444";
+}
+
+function stopTimer() { clearInterval(timerInterval); }
+
+// =============================================================================
+// THEME: INTEROPERABILITY
+// Banana API by Marc Conrad - external PHP server
+// JS frontend + PHP backend communicate via HTTP GET and JSON
+// API:  https://marcconrad.com/uob/banana/api.php
+// Docs: https://marcconrad.com/uob/banana/doc.php
+// =============================================================================
+
+function loadPuzzle() {
     document.getElementById("loadingText").innerText = "⏳ Loading puzzle from API...";
     document.getElementById("puzzleImage").style.display = "none";
+    document.getElementById("feedbackMsg").innerText = "";
 
-    // HTTP GET request to external Banana API
-    // Response format: { question: <image_url>, solution: <number> }
     fetch("https://marcconrad.com/uob/banana/api.php")
-        .then(function(response) {
-            return response.json();
-        })
+        .then(function(response) { return response.json(); })
         .then(function(data) {
             document.getElementById("puzzleImage").src = data.question;
             document.getElementById("puzzleImage").style.display = "block";
             document.getElementById("loadingText").innerText = "";
             correctAnswer = Number(data.solution);
-            console.log("Puzzle loaded from Banana API");
+            startTimer();
         })
         .catch(function(error) {
-            // .catch() handles network errors (event-driven error handling)
             document.getElementById("loadingText").innerText = "❌ Failed to load puzzle. Check connection.";
             console.error("Banana API error:", error);
         });
@@ -92,10 +114,9 @@ function loadPuzzle() {
 // CRISIS MANAGEMENT
 // =============================================================================
 
-// ── Start crisis - triggered by button click event ────────────────────────────
 function startCrisis(type) {
-
     currentCrisis = type;
+    totalTime     = 0;
 
     let crisisLabels = {
         fire:     "🔥 FIRE EMERGENCY",
@@ -106,15 +127,12 @@ function startCrisis(type) {
     document.getElementById("crisisStatus").innerText = crisisLabels[type];
     document.getElementById("feedbackMsg").innerText = "";
 
-    // Reset game for new crisis
     puzzlesSolved = 0;
     score         = 0;
     progress      = 0;
 
     document.getElementById("score").innerText = score;
     updateProgress();
-
-    // Load first puzzle from API
     loadPuzzle();
 }
 
@@ -122,7 +140,6 @@ function startCrisis(type) {
 // ANSWER CHECKING
 // =============================================================================
 
-// ── Check answer - triggered by button click or Enter key event ───────────────
 function checkAnswer() {
 
     if (!currentCrisis) {
@@ -141,10 +158,13 @@ function checkAnswer() {
     userAnswer = Number(userAnswer);
 
     if (userAnswer === correctAnswer) {
-
-        // ── Correct answer ────────────────────────────────────────────────
+        stopTimer();
         puzzlesSolved++;
         score += 10;
+
+        // Bonus points for fast answers
+        if (timeLeft >= 20)      score += 5;
+        else if (timeLeft >= 10) score += 2;
 
         document.getElementById("score").innerText = score;
         document.getElementById("feedbackMsg").innerText = "✅ Correct! +10 points";
@@ -152,11 +172,12 @@ function checkAnswer() {
 
         updateProgress();
 
-        // Check if crisis is fully resolved
         if (puzzlesSolved >= 10) {
+            stopTimer();
             document.getElementById("crisisStatus").innerText = "✅ City Safe!";
             document.getElementById("feedbackMsg").innerText = "🎉 Crisis Solved! City is safe!";
             document.getElementById("victorySound").play();
+            saveScore(score, totalTime);
             currentCrisis = null;
             return;
         }
@@ -166,13 +187,38 @@ function checkAnswer() {
         loadPuzzle();
 
     } else {
-
-        // ── Wrong answer ──────────────────────────────────────────────────
         document.getElementById("feedbackMsg").innerText = "❌ Wrong answer! Try again.";
         document.getElementById("feedbackMsg").style.color = "#ef4444";
         document.getElementById("answer").value = "";
-
     }
+}
+
+// =============================================================================
+// LEADERBOARD - Save score to localStorage
+// =============================================================================
+
+function saveScore(finalScore, timeTaken) {
+    let scores = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+
+    scores.push({
+        name:  playerName,
+        score: finalScore,
+        time:  timeTaken,
+        date:  new Date().toLocaleDateString()
+    });
+
+    scores.sort(function(a, b) {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.time - b.time;
+    });
+
+    scores = scores.slice(0, 10);
+    localStorage.setItem("leaderboard", JSON.stringify(scores));
+
+    setTimeout(function() {
+        let view = confirm("🏆 Score saved! View leaderboard now?");
+        if (view) window.location.href = "leaderboard.html";
+    }, 2000);
 }
 
 // =============================================================================
@@ -187,10 +233,7 @@ function updateProgress() {
 }
 
 // =============================================================================
-// WINDOW ONLOAD EVENT
-// Automatically triggered when page finishes loading (event-driven)
+// WINDOW ONLOAD EVENT (event-driven)
 // =============================================================================
 
-window.onload = function() {
-    loadPuzzle();
-};
+window.onload = function() { loadPuzzle(); };

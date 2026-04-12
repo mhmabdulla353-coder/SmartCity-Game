@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>SmartCity Login</title>
     <link rel="stylesheet" href="style.css">
@@ -16,7 +15,6 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
-
         .star {
             position: fixed;
             background: white;
@@ -27,7 +25,6 @@
             from { opacity: 0.2; }
             to   { opacity: 1; }
         }
-
         .skyline {
             position: fixed;
             bottom: 0;
@@ -35,7 +32,6 @@
             width: 100%;
             pointer-events: none;
         }
-
         .login-card {
             background: rgba(255, 255, 255, 0.07);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -47,28 +43,23 @@
             z-index: 10;
             text-align: center;
         }
-
         .logo { font-size: 3rem; margin-bottom: 0.3rem; }
-
         .login-card h1 {
             font-size: 1.4rem;
             font-weight: 700;
             color: #38bdf8;
             margin: 0 0 0.2rem;
         }
-
         .login-card p.subtitle {
             font-size: 0.85rem;
             color: #94a3b8;
             margin: 0 0 1.8rem;
         }
-
         .input-wrap {
             position: relative;
             margin-bottom: 1.1rem;
             text-align: left;
         }
-
         .input-icon {
             position: absolute;
             left: 12px;
@@ -76,7 +67,6 @@
             transform: translateY(-50%);
             font-size: 15px;
         }
-
         .input-wrap input {
             width: 100%;
             padding: 11px 12px 11px 38px;
@@ -89,14 +79,11 @@
             box-sizing: border-box;
             transition: border-color 0.2s;
         }
-
         .input-wrap input:focus {
             border-color: #38bdf8;
             background: rgba(15, 23, 42, 0.9);
         }
-
         .input-wrap input::placeholder { color: #475569; }
-
         .btn-start {
             width: 100%;
             padding: 13px;
@@ -112,7 +99,6 @@
             transition: opacity 0.2s;
         }
         .btn-start:hover { opacity: 0.88; }
-
         .divider {
             display: flex;
             align-items: center;
@@ -121,7 +107,6 @@
         }
         .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
         .divider-text { font-size: 0.72rem; color: #475569; }
-
         .badges { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
         .badge {
             font-size: 0.7rem;
@@ -132,7 +117,6 @@
         .badge-blue   { color: #38bdf8; border-color: rgba(56,189,248,0.35);  background: rgba(56,189,248,0.08); }
         .badge-green  { color: #22c55e; border-color: rgba(34,197,94,0.35);   background: rgba(34,197,94,0.08); }
         .badge-purple { color: #a78bfa; border-color: rgba(167,139,250,0.35); background: rgba(167,139,250,0.08); }
-
         #errorMsg {
             color: #ef4444;
             font-size: 0.85rem;
@@ -141,48 +125,33 @@
         }
     </style>
 </head>
-
 <body>
 
-    <svg class="skyline" viewBox="0 0 800 120"
-         xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <svg class="skyline" viewBox="0 0 800 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
         <rect x="0"   y="60" width="30"  height="60"  fill="#1e3a5f" opacity="0.8"/>
         <rect x="35"  y="40" width="40"  height="80"  fill="#1e3a5f" opacity="0.8"/>
         <rect x="80"  y="50" width="25"  height="70"  fill="#162d4a" opacity="0.9"/>
         <rect x="110" y="25" width="50"  height="95"  fill="#1e3a5f" opacity="0.8"/>
-        <rect x="130" y="15" width="10"  height="10"  fill="#1e3a5f" opacity="0.8"/>
         <rect x="165" y="55" width="20"  height="65"  fill="#162d4a" opacity="0.9"/>
         <rect x="190" y="35" width="35"  height="85"  fill="#1e3a5f" opacity="0.8"/>
-        <rect x="230" y="60" width="25"  height="60"  fill="#162d4a" opacity="0.9"/>
         <rect x="260" y="20" width="55"  height="100" fill="#1e3a5f" opacity="0.8"/>
         <rect x="278" y="10" width="8"   height="10"  fill="#38bdf8" opacity="0.5"/>
-        <rect x="320" y="45" width="30"  height="75"  fill="#162d4a" opacity="0.9"/>
         <rect x="355" y="30" width="45"  height="90"  fill="#1e3a5f" opacity="0.8"/>
-        <rect x="405" y="55" width="20"  height="65"  fill="#162d4a" opacity="0.9"/>
         <rect x="430" y="35" width="40"  height="85"  fill="#1e3a5f" opacity="0.8"/>
-        <rect x="475" y="50" width="30"  height="70"  fill="#162d4a" opacity="0.9"/>
         <rect x="510" y="20" width="50"  height="100" fill="#1e3a5f" opacity="0.8"/>
         <rect x="528" y="10" width="8"   height="10"  fill="#38bdf8" opacity="0.5"/>
-        <rect x="565" y="45" width="25"  height="75"  fill="#162d4a" opacity="0.9"/>
         <rect x="595" y="30" width="40"  height="90"  fill="#1e3a5f" opacity="0.8"/>
-        <rect x="640" y="55" width="20"  height="65"  fill="#162d4a" opacity="0.9"/>
         <rect x="665" y="25" width="55"  height="95"  fill="#1e3a5f" opacity="0.8"/>
-        <rect x="725" y="50" width="30"  height="70"  fill="#162d4a" opacity="0.9"/>
         <rect x="760" y="40" width="40"  height="80"  fill="#1e3a5f" opacity="0.8"/>
-        <rect x="40"  y="65" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
         <rect x="120" y="55" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
-        <rect x="200" y="60" width="4" height="4" fill="#38bdf8" opacity="0.6"/>
         <rect x="270" y="45" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
         <rect x="360" y="55" width="4" height="4" fill="#38bdf8" opacity="0.6"/>
         <rect x="440" y="58" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
         <rect x="515" y="45" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
-        <rect x="600" y="55" width="4" height="4" fill="#38bdf8" opacity="0.6"/>
         <rect x="670" y="50" width="4" height="4" fill="#fbbf24" opacity="0.7"/>
-        <rect x="770" y="60" width="4" height="4" fill="#38bdf8" opacity="0.6"/>
     </svg>
 
     <div class="login-card">
-
         <div class="logo">🏙</div>
         <h1>SmartCity Login</h1>
         <p class="subtitle">Sign in to manage your city</p>
@@ -212,15 +181,11 @@
             <span class="badge badge-green">🔒 Cookie Auth</span>
             <span class="badge badge-purple">⚡ Events</span>
         </div>
-
     </div>
 
     <script>
-
         // ── THEME: VIRTUAL IDENTITY ──────────────────────────────────────
-        // Using localStorage and sessionStorage to manage player identity.
-        // In a real web application this would use server-side cookies,
-        // but for local file demonstration we use Web Storage API.
+        // Using localStorage and sessionStorage for player authentication
         // Reference: MDN Web Docs - Web Storage API
         // https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API
 
@@ -237,18 +202,15 @@
             document.body.appendChild(star);
         }
 
-        // If already logged in, skip login page
+        // If already logged in, go straight to leaderboard
         if (localStorage.getItem("authenticated") === "true") {
-            window.location.href = "index.html";
+            window.location.href = "leaderboard.html";
         }
 
-        // ── Login Function ───────────────────────────────────────────────
         function login() {
-
             let name     = document.getElementById("playerName").value.trim();
             let password = document.getElementById("playerPassword").value.trim();
 
-            // Validate both fields are filled
             if (name === "" || password === "") {
                 document.getElementById("errorMsg").style.display = "block";
                 return;
@@ -256,28 +218,20 @@
 
             document.getElementById("errorMsg").style.display = "none";
 
-            // Store virtual identity in localStorage
+            // Store virtual identity
             localStorage.setItem("playerName", name);
             localStorage.setItem("authenticated", "true");
-
-            // Store encoded password in sessionStorage
-            // Reference: MDN sessionStorage
-            // https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage
             sessionStorage.setItem("playerPassword", btoa(password));
 
-            // Redirect to main game page
-            window.location.href = "index.html";
+            // ✅ Redirect to leaderboard after login
+            window.location.href = "leaderboard.html";
         }
 
         // ── THEME: EVENT-DRIVEN PROGRAMMING ─────────────────────────────
-        // Enter key event listener triggers login function
+        // Enter key event triggers login
         document.addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                login();
-            }
+            if (event.key === "Enter") { login(); }
         });
-
     </script>
-
 </body>
 </html>
