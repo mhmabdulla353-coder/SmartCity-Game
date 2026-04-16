@@ -1,3 +1,7 @@
+/* =============================================================================
+   SmartCity Puzzle Crisis Simulator - style.css (FINAL VERSION)
+============================================================================= */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #0f172a;
@@ -6,6 +10,8 @@ body {
     margin: 0;
     padding: 0;
 }
+
+/* ── HEADINGS ─────────────────────────────────────────────────────────────── */
 
 h1 {
     background-color: #1e293b;
@@ -17,6 +23,8 @@ h2 {
     color: #38bdf8;
 }
 
+/* ── BUTTONS ─────────────────────────────────────────────────────────────── */
+
 button {
     padding: 10px 15px;
     margin: 5px;
@@ -26,29 +34,25 @@ button {
     font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 button:hover {
     background-color: #0ea5e9;
+    transform: scale(1.05);
 }
+
+/* ── INPUT ───────────────────────────────────────────────────────────────── */
 
 input {
     padding: 8px;
     border-radius: 5px;
     border: none;
+    text-align: center;
+    font-size: 16px;
 }
 
-#progressBar {
-    background-color: #22c55e;
-    height: 25px;
-    width: 0%;
-}
-
-.progress-container {
-    width: 300px;
-    background-color: #334155;
-    margin: auto;
-}
+/* ── DASHBOARD ───────────────────────────────────────────────────────────── */
 
 .dashboard {
     background-color: #1e293b;
@@ -59,10 +63,30 @@ input {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-/* ── Added: Centre the puzzle section ── */
+/* ── PROGRESS BAR ───────────────────────────────────────────────────────── */
+
+.progress-container {
+    width: 300px;
+    background-color: #334155;
+    margin: auto;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#progressBar {
+    background-color: #22c55e;
+    height: 25px;
+    width: 0%;
+    transition: width 0.4s ease;
+}
+
+/* ── PUZZLE SECTION ─────────────────────────────────────────────────────── */
+
 #puzzleImage {
     display: block;
     margin: 10px auto;
+    border-radius: 8px;
+    max-width: 90%;
 }
 
 #answer {
@@ -70,10 +94,90 @@ input {
     margin: 10px auto;
 }
 
+/* ── TEXT ELEMENTS ───────────────────────────────────────────────────────── */
+
 #feedbackMsg {
     text-align: center;
+    font-weight: bold;
 }
 
 #loadingText {
     text-align: center;
+    color: #94a3b8;
+}
+
+/* ── TIMER ───────────────────────────────────────────────────────────────── */
+
+#timerDisplay {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* ── JOKE CARD ───────────────────────────────────────────────────────────── */
+
+.joke-card {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin: 1rem auto;
+    max-width: 400px;
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.joke-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.joke-setup {
+    font-size: 1rem;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+}
+
+.joke-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0.8rem 0;
+}
+
+.joke-punchline {
+    font-size: 1rem;
+    color: #22c55e;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.btn-joke {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #0ea5e9, #6366f1);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.8rem;
+    transition: opacity 0.2s;
+}
+
+.btn-joke:hover {
+    opacity: 0.88;
+}
+
+/* ── ANIMATIONS ─────────────────────────────────────────────────────────── */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

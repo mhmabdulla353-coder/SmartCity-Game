@@ -3,6 +3,55 @@
 <head>
     <title>SmartCity Puzzle Crisis Simulator</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Joke card styling - shown after crisis solved */
+        .joke-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin: 1rem auto;
+            max-width: 400px;
+            display: none;
+        }
+
+        .joke-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+
+        .joke-setup {
+            font-size: 1rem;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            line-height: 1.5;
+        }
+
+        .joke-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0.8rem 0;
+        }
+
+        .joke-punchline {
+            font-size: 1rem;
+            color: #22c55e;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        .btn-joke {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #0ea5e9, #6366f1);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 0.8rem;
+            transition: opacity 0.2s;
+        }
+        .btn-joke:hover { opacity: 0.88; }
+    </style>
 </head>
 <body>
 
@@ -10,11 +59,17 @@
 
     <div class="dashboard">
         <h2>📊 Smart City Dashboard</h2>
+
+        <!-- Player name loaded from localStorage (Virtual Identity) -->
         <p>👤 Player: <span id="playerNameDisplay"></span></p>
         <p>🔐 Session: <span style="color:#22c55e;">Active</span></p>
         <p>🚨 Crisis Status: <span id="crisisStatus">No crisis started</span></p>
         <p>⭐ Score: <span id="score">0</span></p>
-        <p>⏱ Time Left: <span id="timerDisplay" style="font-weight:bold; color:#22c55e;">30s</span></p>
+
+        <!-- Countdown timer display -->
+        <p>⏱ Time Left: <span id="timerDisplay"
+            style="font-weight:bold; color:#22c55e;">30s</span></p>
+
         <p>📈 Progress: <span id="progressText">0%</span></p>
 
         <div class="progress-container">
@@ -22,10 +77,22 @@
         </div>
 
         <br>
-        <button onclick="window.location.href='leaderboard.html'" style="background-color:#6366f1;">🏆 Leaderboard</button>
-        <button onclick="logout()" style="background-color:#ef4444;">🚪 Logout</button>
+
+        <!-- Leaderboard button -->
+        <button onclick="window.location.href='leaderboard.html'"
+                style="background-color:#6366f1;">
+            🏆 Leaderboard
+        </button>
+
+        <!-- Logout button -->
+        <button onclick="logout()"
+                style="background-color:#ef4444;">
+            🚪 Logout
+        </button>
+
     </div>
 
+    <!-- Crisis selection -->
     <h2>🌆 City Crisis</h2>
     <p style="color:#94a3b8;">Select a crisis to begin solving puzzles</p>
 
@@ -33,22 +100,58 @@
     <button onclick="startCrisis('flood')">🌊 Flood</button>
     <button onclick="startCrisis('accident')">🚗 Accident</button>
 
+    <!-- Puzzle section -->
     <h2>🧩 Puzzle</h2>
 
-    <p id="loadingText" style="color:#94a3b8;">Start a crisis to load a puzzle...</p>
-    <img id="puzzleImage" width="300" style="display:none; border-radius:8px;">
+    <p id="loadingText" style="color:#94a3b8;">
+        Start a crisis to load a puzzle...
+    </p>
+
+    <!-- Puzzle image from Banana API -->
+    <img id="puzzleImage" width="300"
+         style="display:none; border-radius:8px;">
 
     <br><br>
 
-    <input type="text" id="answer" placeholder="Enter answer (0-9)" maxlength="1">
+    <input type="text" id="answer"
+           placeholder="Enter answer (0-9)" maxlength="1">
     <button onclick="checkAnswer()">✅ Submit Answer</button>
 
     <br><br>
 
+    <!-- Feedback message -->
     <p id="feedbackMsg" style="font-size:1.2em;"></p>
 
+    <!-- ── JOKE CARD ─────────────────────────────────────────────────── -->
+    <!-- Shown after crisis is solved - powered by Official Joke API     -->
+    <!-- Joke API Reference: https://official-joke-api.appspot.com       -->
+    <div class="joke-card" id="jokeCard">
+
+        <div class="joke-icon">😂</div>
+        <p style="color:#38bdf8; font-size:0.85rem; margin-bottom:0.8rem;">
+            🎉 Crisis Solved! Here is your reward joke!
+        </p>
+
+        <!-- Joke setup line -->
+        <div class="joke-setup" id="jokeSetup">Loading joke...</div>
+
+        <div class="joke-divider"></div>
+
+        <!-- Joke punchline -->
+        <div class="joke-punchline" id="jokePunchline">Please wait...</div>
+
+        <!-- Button to get another joke -->
+        <br>
+        <button class="btn-joke" onclick="fetchJoke()">
+            😂 Get Another Joke
+        </button>
+
+    </div>
+
+    <!-- Victory sound -->
     <audio id="victorySound" src="victory.mp3"></audio>
 
     <script src="script.js"></script>
+
 </body>
 </html>
